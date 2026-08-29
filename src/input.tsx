@@ -2,22 +2,23 @@ import { useState } from 'react'
 
 interface expense {
   amount: number,
-  date: Date,
+  date: string,
   currency: string
 }
 
 export function Input() {
   const [expense, setExpense] = useState<expense>({
     amount: 0,
-    date: new Date(),
+    date: new Date().toISOString().split('T')[0] ?? "1970-01-01",
     currency: "INR"
   });
 
   const handleChangeAmt = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (typeof event.target.value === 'number' && !Number.isNaN(event.target.value)) {
+    const inpAmnt = parseFloat(event.target.value);
+    if (typeof inpAmnt === 'number' && !Number.isNaN(inpAmnt)) {
       setExpense({
         ...expense,
-        amount: event.target.value
+        amount: inpAmnt
       }); // this will leave the function immediately, cant run anything after it
     }
   }
@@ -25,7 +26,7 @@ export function Input() {
   const handleChangeDate = (event: React.ChangeEvent<HTMLInputElement>) => {
     setExpense({
       ...expense,
-      currency: event.target.value
+      date: event.target.value
     }); // this will leave the function immediately, cant run anything after it
   }
 
@@ -45,7 +46,7 @@ export function Input() {
     </select>
     <input
       type="date"
-      value={expense.date.toDateString()}
+      value={expense.date}
       onChange={handleChangeDate} />
   </div>);
 }
