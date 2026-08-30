@@ -1,6 +1,7 @@
 import { useState } from 'react'
+import { updateSubmittedExpense } from './api_go_server';
 
-interface expense {
+export interface expense {
   amount: number,
   date: string,
   currency: string
@@ -37,10 +38,15 @@ export function Input() {
     })
   }
 
-  return (<div><input
-    type="number"
-    onChange={handleChangeAmt}
-    value={expense.amount} />
+  const handleSubmit = () => {
+    updateSubmittedExpense(expense);
+  }
+
+  return (<div>
+    <input
+      type="number"
+      onChange={handleChangeAmt}
+      value={expense.amount} />
     <select value={expense.currency} onChange={handleSelect}>
       <option value="INR">INR</option>
     </select>
@@ -48,6 +54,7 @@ export function Input() {
       type="date"
       value={expense.date}
       onChange={handleChangeDate} />
+    <button onClick={handleSubmit}>Submit</button>
   </div>);
 }
 
