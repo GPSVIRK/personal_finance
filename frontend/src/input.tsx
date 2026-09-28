@@ -20,7 +20,7 @@ export function Input() {
       setExpense({
         ...expense,
         amount: inpAmnt
-      }); // this will leave the function immediately, cant run anything after it
+      }); 
     }
   }
 
@@ -28,7 +28,7 @@ export function Input() {
     setExpense({
       ...expense,
       date: event.target.value
-    }); // this will leave the function immediately, cant run anything after it
+    }); 
   }
 
   const handleSelect = (event: React.ChangeEvent<HTMLSelectElement>) => {
