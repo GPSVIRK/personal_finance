@@ -7,8 +7,10 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/GPSVIRK/Personal_Finance_Manager/backend/handlers"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
 
 	_ "github.com/lib/pq"
@@ -36,8 +38,19 @@ func main(){
 	router := chi.NewRouter()
 
 	router.Use(middleware.Logger)
+	
+	router.Use(cors.Handler(cors.Options{
+		AllowedOrigins: []string{"http://*", "https://*"},
+		AllowedMethods: []string{"GET","PUT","POST","DELETE","OPTIONS"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders: []string{"Link"},
+		AllowCredentials: false,
+		MaxAge: 300,
+	}))
 
-	fmt.Printf("db open and server on %v",portString)
+	router.Get("/test",handlers.Test)
+
+	fmt.Printf("db open and server on %v\n",portString)
 	err = http.ListenAndServe(portString, router)
 	if err != nil{
 		log.Fatal(err)

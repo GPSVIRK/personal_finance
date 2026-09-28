@@ -9,6 +9,18 @@ export const updateSubmittedExpense = (newExpense: expense) => {
   console.log("updated SubmittedExpense: ", submittedExpense);
 };
 
+export async function testConnection(){
+  const r = await fetch("http://localhost:8080/test");
+
+  if(!r.ok){
+    throw new Error(`Could Not connect to go api: ${r.status}`);
+  }
+
+  const rj = await r.json()
+
+  return rj
+}
+
 /*
  * function to send request to go server and log messages
  * use JSON.stringify for converting the object to the correct thing

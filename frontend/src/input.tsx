@@ -16,7 +16,7 @@ export function Input() {
 
   const handleChangeAmt = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inpAmnt = parseFloat(event.target.value);
-    if (typeof inpAmnt === 'number' && !Number.isNaN(inpAmnt)) {
+    if (typeof inpAmnt === 'number') {
       setExpense({
         ...expense,
         amount: inpAmnt
