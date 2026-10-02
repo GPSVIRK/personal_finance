@@ -1,13 +1,18 @@
 import { useState } from 'react'
-import { updateSubmittedExpense } from './api_go_server';
 
 export interface expense {
   amount: number,
   date: string,
-  currency: string
+  currency: string,
+  uuid?: string
 }
 
-export function Input() {
+export interface InputProps{
+  copyStateFn: (exp: expense, id?: string) => void
+  id?: string
+}
+
+export function Input({ copyStateFn, id } : InputProps ) {
   const [expense, setExpense] = useState<expense>({
     amount: 0,
     date: new Date().toISOString().split('T')[0] ?? "1970-01-01",
@@ -39,7 +44,8 @@ export function Input() {
   }
 
   const handleSubmit = () => {
-    updateSubmittedExpense(expense);
+    if(id === undefined) copyStateFn(expense)
+    else copyStateFn(expense, id)
   }
 
   return (<div>
