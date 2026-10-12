@@ -5,14 +5,16 @@
 package database
 
 import (
-	"github.com/jackc/pgx/v5/pgtype"
+	"time"
+
+	"github.com/google/uuid"
 )
 
 type Expense struct {
-	ID            pgtype.UUID
-	Amount        pgtype.Numeric
+	ID            uuid.UUID
+	Amount        string
 	Currency      string
-	DateOfExpense pgtype.Timestamp
-	UpdatedAt     pgtype.Timestamp
-	CreatedAt     pgtype.Timestamp
+	DateOfExpense time.Time
+	UpdatedAt     time.Time
+	CreatedAt     time.Time
 }

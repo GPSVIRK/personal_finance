@@ -7,8 +7,7 @@ package database
 
 import (
 	"context"
-
-	"github.com/jackc/pgx/v5/pgtype"
+	"time"
 )
 
 const insertExpense = `-- name: InsertExpense :one
@@ -26,12 +25,12 @@ RETURNING id, amount, currency, date_of_expense, updated_at, created_at
 `
 
 type InsertExpenseParams struct {
-	Amount        pgtype.Numeric
-	DateOfExpense pgtype.Timestamp
+	Amount        string
+	DateOfExpense time.Time
 }
 
 func (q *Queries) InsertExpense(ctx context.Context, arg InsertExpenseParams) (Expense, error) {
-	row := q.db.QueryRow(ctx, insertExpense, arg.Amount, arg.DateOfExpense)
+	row := q.db.QueryRowContext(ctx, insertExpense, arg.Amount, arg.DateOfExpense)
 	var i Expense
 	err := row.Scan(
 		&i.ID,
