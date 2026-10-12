@@ -27,6 +27,7 @@ func (apicfg *ApiConfig) GetExpenses(w http.ResponseWriter, r *http.Request){
 func (apicfg *ApiConfig)PostExpenses(w http.ResponseWriter, r *http.Request){
 	type params struct {
 		Amount 			string 		`json:"amount"`
+		Currency		string		`json:"currency"`
 		DateOfExpense 	time.Time 	`json:"date_of_expense"`
 	}
 
@@ -41,6 +42,7 @@ func (apicfg *ApiConfig)PostExpenses(w http.ResponseWriter, r *http.Request){
 
 	dbExp, err := apicfg.DB.InsertExpense(r.Context(), database.InsertExpenseParams{
 		Amount: p.Amount,
+		Currency: p.Currency,
 		DateOfExpense: p.DateOfExpense,
 	})
 	if err!=nil {

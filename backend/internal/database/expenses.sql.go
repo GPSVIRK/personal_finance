@@ -47,11 +47,12 @@ func (q *Queries) GetExpenses(ctx context.Context) ([]Expense, error) {
 const insertExpense = `-- name: InsertExpense :one
 INSERT INTO expenses(
   amount,
+  currency,
   date_of_expense,
   updated_at,
   created_at
 ) VALUES(
-  $1, $2,
+  $1, $2, $3,
   CURRENT_TIMESTAMP,
   CURRENT_TIMESTAMP
 )
@@ -60,11 +61,12 @@ RETURNING id, amount, currency, date_of_expense, updated_at, created_at
 
 type InsertExpenseParams struct {
 	Amount        string
+	Currency      string
 	DateOfExpense time.Time
 }
 
 func (q *Queries) InsertExpense(ctx context.Context, arg InsertExpenseParams) (Expense, error) {
-	row := q.db.QueryRowContext(ctx, insertExpense, arg.Amount, arg.DateOfExpense)
+	row := q.db.QueryRowContext(ctx, insertExpense, arg.Amount, arg.Currency, arg.DateOfExpense)
 	var i Expense
 	err := row.Scan(
 		&i.ID,
