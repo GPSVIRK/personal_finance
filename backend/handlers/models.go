@@ -36,3 +36,17 @@ func databaseExpenseToExpense(dbExp database.Expense) (Expense, error){
 		CreatedAt:     dbExp.CreatedAt,
 	}, nil
 }
+
+func databaseExpensesToExpenses(dbExps []database.Expense) ([]Expense, error){
+	expenses := []Expense{}
+
+	for _,dbExp := range dbExps{
+		expense,err := databaseExpenseToExpense(dbExp)
+		if err!=nil {
+			return []Expense{}, err
+		}
+		expenses = append(expenses, expense)
+	}
+
+	return expenses,nil
+}

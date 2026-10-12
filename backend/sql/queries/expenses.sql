@@ -10,3 +10,6 @@ INSERT INTO expenses(
   CURRENT_TIMESTAMP
 )
 RETURNING *;
+
+-- name: GetExpenses :many
+SELECT * FROM expenses;

@@ -58,9 +58,9 @@ func main(){
 
 	router.Get("/test",handlers.Test)
 
-	router.Get("/expenses",handlers.GetExpenses)
+	router.Get("/expenses",apiCfg.GetExpenses)
 	router.Post("/expenses",apiCfg.PostExpenses)
-	router.Patch("/expenses",handlers.PatchExpenses)
+	router.Patch("/expenses",apiCfg.PatchExpenses)
 
 	fmt.Printf("db open and server on %v\n",portString)
 	err = http.ListenAndServe(portString, router)
