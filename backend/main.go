@@ -26,10 +26,10 @@ func main(){
 	portString := ":"+os.Getenv("PORT")
 
 	db, err := sql.Open("postgres", db_url)
-
 	defer db.Close()
+
 	if err!=nil{
-		log.Fatalf("ERR opening database: %v",err)
+		log.Fatal(err)
 	}
 	if err=db.Ping(); err!=nil{
 		log.Fatal(err)
@@ -49,6 +49,10 @@ func main(){
 	}))
 
 	router.Get("/test",handlers.Test)
+
+	router.Get("/expenses",handlers.GetExpenses)
+	router.Post("/expenses",handlers.PostExpenses)
+	router.Patch("/expenses",handlers.PatchExpenses)
 
 	fmt.Printf("db open and server on %v\n",portString)
 	err = http.ListenAndServe(portString, router)
