@@ -8,6 +8,8 @@ package database
 import (
 	"context"
 	"time"
+
+	"github.com/google/uuid"
 )
 
 const getExpenses = `-- name: GetExpenses :many
@@ -67,6 +69,38 @@ type InsertExpenseParams struct {
 
 func (q *Queries) InsertExpense(ctx context.Context, arg InsertExpenseParams) (Expense, error) {
 	row := q.db.QueryRowContext(ctx, insertExpense, arg.Amount, arg.Currency, arg.DateOfExpense)
+	var i Expense
+	err := row.Scan(
+		&i.ID,
+		&i.Amount,
+		&i.Currency,
+		&i.DateOfExpense,
+		&i.UpdatedAt,
+		&i.CreatedAt,
+	)
+	return i, err
+}
+
+const updateExpense = `-- name: UpdateExpense :one
+UPDATE expenses SET amount=$1, currency=$2, date_of_expense=$3
+WHERE id=$4
+RETURNING id, amount, currency, date_of_expense, updated_at, created_at
+`
+
+type UpdateExpenseParams struct {
+	Amount        string
+	Currency      string
+	DateOfExpense time.Time
+	ID            uuid.UUID
+}
+
+func (q *Queries) UpdateExpense(ctx context.Context, arg UpdateExpenseParams) (Expense, error) {
+	row := q.db.QueryRowContext(ctx, updateExpense,
+		arg.Amount,
+		arg.Currency,
+		arg.DateOfExpense,
+		arg.ID,
+	)
 	var i Expense
 	err := row.Scan(
 		&i.ID,

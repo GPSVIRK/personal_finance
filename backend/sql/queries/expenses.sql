@@ -15,3 +15,7 @@ RETURNING *;
 -- name: GetExpenses :many
 SELECT * FROM expenses;
 
+-- name: UpdateExpense :one
+UPDATE expenses SET amount=$1, currency=$2, date_of_expense=$3
+WHERE id=$4
+RETURNING *;
