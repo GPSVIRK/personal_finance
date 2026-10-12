@@ -3,7 +3,10 @@ package handlers
 import "net/http"
 
 func Test(w http.ResponseWriter, r *http.Request){
-	w.Write([]byte(`{
-		"message":"TEST"
-	}`))
+	type testResponse struct{
+		Message string `json:"message"`
+	}
+	respondWithJSON(w, 200, testResponse{
+		Message: "TEST MESSAGE WOW",
+	})
 }
