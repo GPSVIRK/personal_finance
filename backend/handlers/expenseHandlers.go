@@ -97,3 +97,27 @@ func (apicfg *ApiConfig)PatchExpenses(w http.ResponseWriter, r *http.Request){
 
 	respondWithJSON(w, 200, exp)
 }
+
+func (apiCfg *ApiConfig) DeleteExpense(w http.ResponseWriter, r *http.Request){
+	type params struct {
+		ID uuid.UUID `json:"id"`
+	}
+
+	decoder := json.NewDecoder(r.Body)
+	p:=params{}
+
+	err := decoder.Decode(p)
+	if err!=nil {
+		respondWithError(w, 400, fmt.Sprintf("Err failed to decode: %v", err))
+		return
+	}
+
+	err = apiCfg.DB.DeleteExpense(r.Context(), p.ID)
+	if err!=nil{
+		respondWithError(w, 500, fmt.Sprintf("Err failed to delete expense: %v", err))
+		return
+	}
+
+	var empty interface{}
+	respondWithJSON(w, 200, empty)
+}

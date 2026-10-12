@@ -12,6 +12,16 @@ import (
 	"github.com/google/uuid"
 )
 
+const deleteExpense = `-- name: DeleteExpense :exec
+DELETE FROM expenses
+WHERE id=$1
+`
+
+func (q *Queries) DeleteExpense(ctx context.Context, id uuid.UUID) error {
+	_, err := q.db.ExecContext(ctx, deleteExpense, id)
+	return err
+}
+
 const getExpenses = `-- name: GetExpenses :many
 SELECT id, amount, currency, date_of_expense, updated_at, created_at FROM expenses
 `

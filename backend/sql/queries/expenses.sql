@@ -19,3 +19,7 @@ SELECT * FROM expenses;
 UPDATE expenses SET amount=$1, currency=$2, date_of_expense=$3
 WHERE id=$4
 RETURNING *;
+
+-- name: DeleteExpense :exec
+DELETE FROM expenses
+WHERE id=$1;

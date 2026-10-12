@@ -61,6 +61,7 @@ func main(){
 	router.Get("/expenses",apiCfg.GetExpenses)
 	router.Post("/expenses",apiCfg.PostExpenses)
 	router.Patch("/expenses",apiCfg.PatchExpenses)
+	router.Delete("/expenses",apiCfg.DeleteExpense)
 
 	fmt.Printf("db open and server on %v\n",portString)
 	err = http.ListenAndServe(portString, router)
