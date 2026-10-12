@@ -8,6 +8,7 @@ import (
 	"os"
 
 	"github.com/GPSVIRK/Personal_Finance_Manager/backend/handlers"
+	"github.com/GPSVIRK/Personal_Finance_Manager/backend/internal/database"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
@@ -16,23 +17,30 @@ import (
 	_ "github.com/lib/pq"
 )
 
+
+
 func main(){
 	err := godotenv.Load()
 	if err != nil{
 		log.Fatalf("ERROR loading .env: %v",err)
 	}
 
-	db_url := os.Getenv("DB_URL")
 	portString := ":"+os.Getenv("PORT")
+	db_url := os.Getenv("DB_URL")
 
-	db, err := sql.Open("postgres", db_url)
-	defer db.Close()
+	conn, err := sql.Open("postgres", db_url)
+	defer conn.Close()
 
 	if err!=nil{
 		log.Fatal(err)
 	}
-	if err=db.Ping(); err!=nil{
+	if err=conn.Ping(); err!=nil{
 		log.Fatal(err)
+	}
+
+	db := database.New(conn)
+	apiCfg := handlers.ApiConfig{
+		DB: db,
 	}
 
 	router := chi.NewRouter()
@@ -51,7 +59,7 @@ func main(){
 	router.Get("/test",handlers.Test)
 
 	router.Get("/expenses",handlers.GetExpenses)
-	router.Post("/expenses",handlers.PostExpenses)
+	router.Post("/expenses",apiCfg.PostExpenses)
 	router.Patch("/expenses",handlers.PatchExpenses)
 
 	fmt.Printf("db open and server on %v\n",portString)
